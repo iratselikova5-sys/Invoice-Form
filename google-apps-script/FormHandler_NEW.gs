@@ -7,8 +7,8 @@ var HEADERS = ['timestamp', 'email', 'name', 'topic', 'details'];
 // Человеческие имена тем
 var TOPIC_LABELS = {
   alpha: 'Alpha',
-  invoice_issue: 'Invoice',
-  payment_change: 'Payment details change',
+  invoice: 'Invoice',
+  payment: 'Payment details change',
   other: 'Other question'
 };
 
@@ -24,11 +24,8 @@ var FIELD_LABELS = {
   payment_wire_beneficiary_name: 'Wire — beneficiary',
   payment_wire_bank_name: 'Wire — bank',
   payment_wire_swift: 'Wire — SWIFT',
+  payment_wire_routing_number: 'Wire — routing (ABA)',
   payment_wire_account_number: 'Wire — account',
-  payment_ach_beneficiary_name: 'ACH — beneficiary',
-  payment_ach_bank_name: 'ACH — bank',
-  payment_ach_routing_number: 'ACH — routing',
-  payment_ach_account_number: 'ACH — account',
   payment_owner_confirm: 'Owner confirmed',
   payment_additional_info: 'Additional info',
   other_question_text: 'Question'
@@ -246,28 +243,21 @@ function validatePayload_(payload) {
     if (!str_(payload.alpha_primary_type)) errors.push('alpha_primary_type is required');
 
   } else if (topic === 'invoice') {
-    if (!str_(payload.invoice_issue_type))  errors.push('invoice_issue_type is required');
-    if (!str_(payload.invoice_description)) errors.push('invoice_description is required');
+    if (!str_(payload.invoice_issue_type)) errors.push('invoice_issue_type is required');
+    if (payload.invoice_issue_type === 'other' && !str_(payload.invoice_description)) errors.push('invoice_description is required');
 
   } else if (topic === 'payment') {
     var method = str_(payload.payment_method);
     if (!method) {
       errors.push('payment_method is required');
     } else {
-      if (method === 'paypal'        && !str_(payload.payment_paypal_email))             errors.push('payment_paypal_email is required');
-      if (method === 'skrill'        && !str_(payload.payment_skrill_email))             errors.push('payment_skrill_email is required');
-      if (method === 'payoneer'      && !str_(payload.payment_payoneer_email))           errors.push('payment_payoneer_email is required');
+      if (method === 'paypal'   && !str_(payload.payment_paypal_email))   errors.push('payment_paypal_email is required');
+      if (method === 'skrill'   && !str_(payload.payment_skrill_email))   errors.push('payment_skrill_email is required');
+      if (method === 'payoneer' && !str_(payload.payment_payoneer_email)) errors.push('payment_payoneer_email is required');
       if (method === 'wire_transfer') {
         if (!str_(payload.payment_wire_beneficiary_name)) errors.push('payment_wire_beneficiary_name is required');
         if (!str_(payload.payment_wire_bank_name))        errors.push('payment_wire_bank_name is required');
-        if (!str_(payload.payment_wire_swift))            errors.push('payment_wire_swift is required');
         if (!str_(payload.payment_wire_account_number))   errors.push('payment_wire_account_number is required');
-      }
-      if (method === 'ach_transfer') {
-        if (!str_(payload.payment_ach_beneficiary_name))  errors.push('payment_ach_beneficiary_name is required');
-        if (!str_(payload.payment_ach_bank_name))         errors.push('payment_ach_bank_name is required');
-        if (!str_(payload.payment_ach_routing_number))    errors.push('payment_ach_routing_number is required');
-        if (!str_(payload.payment_ach_account_number))    errors.push('payment_ach_account_number is required');
       }
       if (payload.payment_owner_confirm !== 'yes') errors.push('payment_owner_confirm is required');
     }
