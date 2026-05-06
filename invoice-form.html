@@ -711,7 +711,7 @@
                     </select>
                   </div>
                   <div id="invoice-desc-wrap" class="field hidden">
-                    <label for="invoice-desc">Your question <span class="req">*</span></label>
+                    <label for="invoice-desc">Your question <span class="req" id="invoice-desc-req" hidden>*</span></label>
                     <textarea id="invoice-desc" name="invoice_description" rows="4" placeholder="Type your question here"></textarea>
                   </div>
                 </div>
@@ -1285,8 +1285,10 @@
       const invoiceDescWrap = document.getElementById("invoice-desc-wrap");
       invoiceSelect.addEventListener("change", function () {
         const on = !!this.value;
+        const isOther = this.value === "other";
         invoiceDescWrap.classList.toggle("hidden", !on);
-        document.getElementById("invoice-desc").required = on;
+        document.getElementById("invoice-desc").required = isOther;
+        document.getElementById("invoice-desc-req").hidden = !isOther;
         syncOtherRequired();
         if (on) document.getElementById("invoice-desc").focus();
       });
@@ -1334,6 +1336,7 @@
         document.getElementById("invoice-desc").value = "";
         invoiceDescWrap.classList.add("hidden");
         document.getElementById("invoice-desc").required = false;
+        document.getElementById("invoice-desc-req").hidden = true;
       }
 
       function clearPaymentSection() {
