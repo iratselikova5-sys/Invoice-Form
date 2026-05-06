@@ -562,6 +562,24 @@
       background: var(--primary);
     }
 
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.875rem;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 20px;
+      font-family: inherit;
+    }
+
+    .btn-back:hover {
+      color: var(--text);
+    }
+
   </style>
 </head>
 <body>
@@ -604,6 +622,7 @@
 
       <!-- Step 2 -->
       <div class="step" id="step-2" data-step="2">
+        <button type="button" id="btn-back" class="btn-back">&#8592; Back</button>
         <fieldset class="topic-picker field" aria-label="Choose request topic">
           <div class="topic-radios" role="radiogroup" aria-label="Request topic">
             <div class="topic-item">
@@ -669,6 +688,7 @@
                       <option value="">Click to choose</option>
                       <option value="link_broken">The link to the invoice doesn’t work</option>
                       <option value="not_received">The payment is not received</option>
+                      <option value="invoice_not_received">I didn’t receive the invoice email</option>
                       <option value="other">Other</option>
                     </select>
                   </div>
@@ -754,7 +774,7 @@
 
     <div id="flow-thanks-panel" class="hidden" hidden role="status">
       <p class="thanks-text">
-        Thank you very much for submitting your question. We will try to resolve it as soon as possible.
+        Thank you very much for submitting your question. We will try to resolve it but it may take 1–2 days. We will get back to you as soon as possible.
       </p>
       <button type="button" class="btn-primary" id="btn-submit-another">
         Submit one more question
@@ -1083,6 +1103,10 @@
         document.getElementById("lede-step-1").classList.toggle("hidden", n !== 1);
         document.getElementById("lede-step-2").classList.toggle("hidden", n !== 2);
       }
+
+      document.getElementById("btn-back").addEventListener("click", function () {
+        showStep(1);
+      });
 
       btnContinue.addEventListener("click", function () {
         if (!document.getElementById("name").checkValidity() || !document.getElementById("email").checkValidity()) {
