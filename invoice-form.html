@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invoice &amp; Payments — Alconost</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1a1a1a;
+      --label: #333333;
+      --muted: #6b7280;
+      --placeholder: #9ca3af;
+      --border: #cccccc;
+      --border-focus: #2563eb;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --required: #dc2626;
+      --info-bg: #f8fafc;
+      --radius: 6px;
+      --maxw: 520px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 40px 20px 64px;
+    }
+
+    .form-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin: 0 0 8px;
+      color: var(--label);
+      line-height: 1.25;
+      text-align: center;
+    }
+
+    .lede {
+      margin: 0 0 28px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .lede p {
+      margin: 0 0 0.65em;
+      line-height: 1.5;
+    }
+
+    .lede p:last-child {
+      margin-bottom: 0;
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.is-active {
+      display: block;
+    }
+
+    .field {
+      margin-bottom: 22px;
+    }
+
+    .field label,
+    .label-row {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--label);
+      margin-bottom: 8px;
+    }
+
+    .req {
+      color: var(--required);
+      font-weight: 600;
+      margin-left: 2px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 11px 12px;
+      font-size: 15px;
+      font-family: inherit;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.15s ease;
+    }
+
+    select {
+      width: 100%;
+      max-width: 100%;
+      padding: 11px 2.75rem 11px 12px;
+      font-size: 15px;
+      font-family: inherit;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.15s ease;
+      line-height: 1.35;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--placeholder);
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 1px var(--border-focus);
+    }
+
+    select.topic-select.is-empty {
+      color: var(--placeholder);
+    }
+
+    select.topic-select:not(.is-empty) {
+      color: var(--text);
+    }
+
+    select.topic-select option {
+      color: var(--text);
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px 20px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      color: #fff;
+      background: var(--primary);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .hint {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0 0 18px;
+    }
+
+    .callout {
+      font-size: 0.8rem;
+      line-height: 1.45;
+      color: var(--muted);
+      background: var(--info-bg);
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius);
+      padding: 8px 14px 10px;
+      margin-bottom: 16px;
+    }
+
+    .callout p {
+      margin: 0 0 0.45em;
+    }
+
+    .callout p:last-child {
+      margin-bottom: 0;
+    }
+
+    .callout-ul {
+      margin: 0 0 0.45em;
+      padding-left: 1.15em;
+      list-style-type: disc;
+    }
+
+    .callout-ul li {
+      margin: 0;
+      padding: 0;
+      line-height: 1.4;
+    }
+
+    .callout a {
+      color: var(--primary);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .callout a:hover {
+      color: var(--primary-hover);
+    }
+
+    .callout-gap {
+      margin-top: 0.45em;
+    }
+
+    .topic-block {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      overflow: hidden;
+      background: var(--bg);
+      padding: 14px 16px 16px;
+    }
+
+    .topic-panel {
+      padding: 0;
+      border: none;
+    }
+
+    fieldset.topic-picker {
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .subfields {
+      display: grid;
+      gap: 14px;
+    }
+
+    .alpha-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 14px;
+      background: #fafafa;
+    }
+
+    .alpha-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 12px;
+    }
+
+    .alpha-card-head span {
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--label);
+    }
+
+    .btn-ghost {
+      font-size: 0.8rem;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      cursor: pointer;
+      color: var(--muted);
+    }
+
+    .btn-ghost:hover {
+      background: #f3f4f6;
+      color: var(--text);
+    }
+
+    .btn-add {
+      width: 100%;
+      padding: 12px;
+      font-size: 0.92rem;
+      font-weight: 500;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      color: var(--primary);
+      cursor: pointer;
+      margin-bottom: 8px;
+    }
+
+    .btn-add:hover:not(:disabled) {
+      background: #eff6ff;
+      border-color: var(--primary);
+    }
+
+    .btn-add:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .checkbox-row input {
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .checkbox-row label {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .checkbox-row a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .checkbox-row a:hover {
+      text-decoration: underline;
+    }
+
+    /* Payment details: tighten space between textarea and owner checkbox */
+    #payment-fields-root > .field + .checkbox-row {
+      margin-top: 0;
+    }
+
+    #payment-fields-root > .field:has(+ .checkbox-row) {
+      margin-bottom: 8px;
+    }
+
+    /* Tighter stack for Wire / ACH (four short fields) */
+    #payment-fields-root.payment-fields-root--compact > .field {
+      margin-bottom: 8px;
+    }
+
+    #payment-fields-root.payment-fields-root--compact > .field label {
+      margin-bottom: 4px;
+    }
+
+    #payment-fields-root.payment-fields-root--compact > .field:has(+ .checkbox-row) {
+      margin-bottom: 4px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .topic-picker {
+      margin-bottom: 20px;
+    }
+
+    .topic-radios {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .topic-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .topic-item .topic-block {
+      margin-top: 10px;
+      margin-bottom: 0;
+    }
+
+    .topic-item:has(.topic-block:not(.hidden)) .topic-choice-card {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .topic-item .topic-block:not(.hidden) {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      margin-top: 0;
+      border-top: none;
+    }
+
+    .topic-choice-card {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      margin: 0;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: #fafafa;
+      font-weight: 500;
+      font-size: 0.92rem;
+      color: var(--text);
+      cursor: pointer;
+      line-height: 1.35;
+      transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .topic-choice-card:hover {
+      background: #f3f4f6;
+      border-color: #a3a3a3;
+    }
+
+    .topic-choice-card:focus-within {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 1px var(--border-focus);
+    }
+
+    .topic-choice-card:has(input:checked) {
+      border-color: var(--primary);
+      background: #eff6ff;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.35);
+    }
+
+    /* Hide native radio circle; selection shown via card styles (:has(input:checked)) */
+    .topic-choice-card input[type="radio"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .topic-choice-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .topic-choice-arrow {
+      flex-shrink: 0;
+      color: var(--muted);
+      font-size: 1.15rem;
+      line-height: 1;
+      font-weight: 400;
+    }
+
+    .topic-choice-card:has(input:checked) .topic-choice-arrow {
+      color: var(--primary);
+    }
+
+    /* Thank-you screen (after successful submit) */
+    #flow-thanks-panel {
+      text-align: center;
+      padding: 12px 0 24px;
+    }
+
+    .thanks-text {
+      margin: 0 0 26px;
+      font-size: 1.05rem;
+      line-height: 1.55;
+      color: var(--text);
+    }
+
+    #btn-submit-another {
+      max-width: 100%;
+    }
+
+    .form-error {
+      font-size: 0.875rem;
+      color: var(--required);
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .form-error.is-visible {
+      display: block;
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .hp-field {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 0 24px;
+    }
+
+    .step-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--bg);
+      flex-shrink: 0;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+
+    .step-dot.is-active {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .step-dot.is-done {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .step-line {
+      width: 48px;
+      height: 2px;
+      background: var(--border);
+      transition: background 0.2s;
+    }
+
+    .step-line.is-done {
+      background: var(--primary);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div id="flow-form-panel">
+      <h1 class="form-title">Invoice &amp; Payments</h1>
+      <div class="step-indicator" id="step-indicator" aria-label="Step 1 of 2">
+        <div class="step-dot is-active" id="step-dot-1">1</div>
+        <div class="step-line" id="step-line"></div>
+        <div class="step-dot" id="step-dot-2">2</div>
+      </div>
+      <div class="lede" id="lede-step-1">
+        <p>
+          Please fill out this form if you have questions about your invoice, the tasks included in it, payment status, or you'd like to update your payment details.
+        </p>
+      </div>
+      <div class="lede hidden" id="lede-step-2">
+        <p>Please choose the relevant topic and fill out the fields.</p>
+        <p>You can choose and submit only one question at a time. Switching topics clears the filled sections until you submit.</p>
+        <p><span class="req">*</span> Required field.</p>
+      </div>
+
+      <form id="invoice-form" novalidate>
+      <div class="hp-field" aria-hidden="true">
+        <label for="hp-website">Website</label>
+        <input type="text" id="hp-website" name="website" tabindex="-1" autocomplete="off" />
+      </div>
+      <!-- Step 1 -->
+      <div class="step is-active" id="step-1" data-step="1">
+        <div class="field">
+          <label for="name">Your name <span class="req">*</span></label>
+          <input type="text" id="name" name="your_name" required autocomplete="name" placeholder="ex.: John Doe" />
+        </div>
+        <div class="field">
+          <label for="email">Your email <span class="req">*</span></label>
+          <input type="email" id="email" name="your_email" required autocomplete="email" placeholder="example@email.com" />
+        </div>
+        <button type="button" class="btn-primary" id="btn-continue">Continue</button>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step" id="step-2" data-step="2">
+        <fieldset class="topic-picker field" aria-label="Choose request topic">
+          <div class="topic-radios" role="radiogroup" aria-label="Request topic">
+            <div class="topic-item">
+              <label class="topic-choice-card">
+                <input type="radio" name="main_topic" value="alpha" required />
+                <span class="topic-choice-text">Alpha tasks</span>
+                <span class="topic-choice-arrow" aria-hidden="true">›</span>
+              </label>
+              <div class="topic-block hidden" id="block-alpha" data-topic="alpha">
+                <div class="topic-panel" id="panel-alpha" role="region">
+                  <div class="field">
+                    <label for="alpha-please-select">Please select your question</label>
+                    <select id="alpha-please-select" name="alpha_primary_type" class="topic-select is-empty" data-role="alpha-master-select">
+                      <option value="">Click to choose</option>
+                      <option value="incorrect_royalty">Incorrect royalty</option>
+                      <option value="alpha_missing">Alpha missing in the invoice</option>
+                      <option value="incorrect_alpha_date">Incorrect alpha date</option>
+                      <option value="incorrect_rate">Incorrect rate</option>
+                      <option value="incorrect_volume">Incorrect task volume</option>
+                      <option value="not_my_task">I didn’t do this task</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div id="alpha-dynamic-master" class="subfields hidden"></div>
+                  <div id="alpha-issues-extra"></div>
+                  <div id="add-alpha-footer" class="hidden">
+                    <p class="hint" style="margin-bottom: 10px">You can add up to 10 separate alphas.</p>
+                    <button type="button" class="btn-add" id="add-alpha">+ Add another alpha</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="topic-item">
+              <label class="topic-choice-card">
+                <input type="radio" name="main_topic" value="invoice" />
+                <span class="topic-choice-text">Invoice / Payment</span>
+                <span class="topic-choice-arrow" aria-hidden="true">›</span>
+              </label>
+              <div class="topic-block hidden" id="block-invoice" data-topic="invoice">
+                <div class="topic-panel" id="panel-invoice" role="region">
+                  <div class="callout" role="note">
+                    <p><strong>Payment period:</strong> Between the 20th and 25th of the month for all tasks performed in the previous month.</p>
+                    <p class="callout-gap"><strong>Payout limits:</strong></p>
+                    <ul class="callout-ul">
+                      <li>PayPal or Skrill (no minimum)</li>
+                      <li>
+                        <a
+                          href="https://www.notion.so/alconostvend/Finances-238ae53670464028902aad04536029ad#1d84b0df64c98061a1deeb4d398cd12a"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          >Payoneer</a>
+                        (minimum EUR 50)
+                      </li>
+                      <li>Wire Transfer (minimum USD 500)</li>
+                      <li>ACH to U.S. bank and Wise (no minimum)</li>
+                    </ul>
+                    <p>If your invoice is less than the payout limit it will be paid out as soon as it reaches the limit or you can choose the payment method with a suitable payout limit.</p>
+                  </div>
+                  <div class="field">
+                    <label for="invoice-please-select">Please select your question</label>
+                    <select id="invoice-please-select" name="invoice_issue_type" class="topic-select is-empty">
+                      <option value="">Click to choose</option>
+                      <option value="link_broken">The link to the invoice doesn’t work</option>
+                      <option value="not_received">The payment is not received</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div id="invoice-desc-wrap" class="field hidden">
+                    <label for="invoice-desc">Your question <span class="req">*</span></label>
+                    <textarea id="invoice-desc" name="invoice_description" rows="4" placeholder="Type your question here"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="topic-item">
+              <label class="topic-choice-card">
+                <input type="radio" name="main_topic" value="payment" />
+                <span class="topic-choice-text">Payment details update</span>
+                <span class="topic-choice-arrow" aria-hidden="true">›</span>
+              </label>
+              <div class="topic-block hidden" id="block-payment" data-topic="payment">
+                <div class="topic-panel" id="panel-payment" role="region">
+                  <div class="callout" role="note">
+                    <p class="callout-gap"><strong>Payout limits:</strong></p>
+                    <ul class="callout-ul">
+                      <li>PayPal or Skrill (no minimum)</li>
+                      <li>
+                        <a
+                          href="https://www.notion.so/alconostvend/Finances-238ae53670464028902aad04536029ad#1d84b0df64c98061a1deeb4d398cd12a"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          >Payoneer</a>
+                        (minimum EUR 50)
+                      </li>
+                      <li>Wire Transfer (minimum USD 500)</li>
+                      <li>ACH to U.S. bank and Wise (no minimum)</li>
+                    </ul>
+                  </div>
+                  <div class="field">
+                    <label for="payment-please-select">Please select your payment method</label>
+                    <select id="payment-please-select" name="payment_method" class="topic-select is-empty">
+                      <option value="">Click to choose</option>
+                      <option value="paypal">Paypal</option>
+                      <option value="skrill">Skrill</option>
+                      <option value="payoneer">Payoneer</option>
+                      <option value="wire_transfer">Wire transfer</option>
+                      <option value="ach_transfer">ACH transfer (to U.S banks, Wise, Revolut accounts etc.)</option>
+                    </select>
+                  </div>
+                  <div id="payment-fields-root" class="subfields"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="topic-item">
+              <label class="topic-choice-card">
+                <input type="radio" name="main_topic" value="other" />
+                <span class="topic-choice-text">Other questions</span>
+                <span class="topic-choice-arrow" aria-hidden="true">›</span>
+              </label>
+              <div class="topic-block hidden" id="block-other" data-topic="other">
+                <div class="topic-panel" id="panel-other" role="region">
+                  <p class="hint" style="margin-top: 0">Ask anything that doesn’t fit the topics above.</p>
+                  <div class="field">
+                    <label for="other-desc">Your question <span class="req">*</span></label>
+                    <textarea
+                      id="other-desc"
+                      name="other_question_text"
+                      rows="5"
+                      placeholder="Type your question here"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <div id="form-error" class="form-error" role="alert"></div>
+        <div class="field" style="margin-top: 28px">
+          <button type="submit" class="btn-primary">Submit</button>
+        </div>
+      </div>
+    </form>
+    </div>
+
+    <div id="flow-thanks-panel" class="hidden" hidden role="status">
+      <p class="thanks-text">
+        Thank you very much for submitting your question. We will try to resolve it as soon as possible.
+      </p>
+      <button type="button" class="btn-primary" id="btn-submit-another">
+        Submit one more question
+      </button>
+    </div>
+  </div>
+
+  <template id="tpl-alpha-card">
+    <div class="alpha-card" data-alpha-card>
+      <div class="alpha-card-head">
+        <span class="alpha-title">Alpha issue</span>
+        <button type="button" class="btn-ghost remove-alpha">Remove</button>
+      </div>
+      <div class="field">
+        <label class="alpha-select-label">Please select your question</label>
+        <select class="alpha-type topic-select is-empty" name="alpha_type_extra[]">
+          <option value="">Click to choose</option>
+          <option value="incorrect_royalty">Incorrect royalty</option>
+          <option value="alpha_missing">Alpha missing in the invoice</option>
+          <option value="incorrect_alpha_date">Incorrect alpha date</option>
+          <option value="incorrect_rate">Incorrect rate</option>
+          <option value="incorrect_volume">Incorrect task volume</option>
+          <option value="not_my_task">I didn’t do this task</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="alpha-dynamic subfields"></div>
+    </div>
+  </template>
+
+  <template id="tpl-payment-paypal">
+    <div class="field">
+      <label>Your PayPal email <span class="req">*</span></label>
+      <input type="email" name="payment_paypal_email" required placeholder="example@email.com" autocomplete="email" />
+    </div>
+    <div class="checkbox-row">
+      <input type="checkbox" name="payment_owner_confirm" value="yes" required />
+      <label>I confirm that the new account belongs to me. <span class="req">*</span></label>
+    </div>
+    <div class="field">
+      <label>Additional info</label>
+      <textarea name="payment_additional_info" rows="3" placeholder="If you have any additional info that you'd like to share, please type it here"></textarea>
+    </div>
+  </template>
+
+  <template id="tpl-payment-skrill">
+    <div class="field">
+      <label>Your Skrill email <span class="req">*</span></label>
+      <input type="email" name="payment_skrill_email" required placeholder="example@email.com" autocomplete="email" />
+    </div>
+    <div class="checkbox-row">
+      <input type="checkbox" name="payment_owner_confirm" value="yes" required />
+      <label>I confirm that the new account belongs to me. <span class="req">*</span></label>
+    </div>
+    <div class="field">
+      <label>Additional info</label>
+      <textarea name="payment_additional_info" rows="3" placeholder="If you have any additional info that you'd like to share, please type it here"></textarea>
+    </div>
+  </template>
+
+  <template id="tpl-payment-payoneer">
+    <div class="field">
+      <label>Your Payoneer email <span class="req">*</span></label>
+      <input type="email" name="payment_payoneer_email" required placeholder="example@email.com" autocomplete="email" />
+    </div>
+    <div class="checkbox-row">
+      <input type="checkbox" name="payment_owner_confirm" value="yes" required />
+      <label>I confirm that the new account belongs to me. <span class="req">*</span></label>
+    </div>
+    <div class="field">
+      <label>Additional info</label>
+      <textarea name="payment_additional_info" rows="3" placeholder="If you have any additional info that you'd like to share, please type it here"></textarea>
+    </div>
+  </template>
+
+  <template id="tpl-payment-wire">
+    <div class="field">
+      <label>Beneficiary name <span class="req">*</span></label>
+      <input type="text" name="payment_wire_beneficiary_name" required placeholder="ex.: John Doe" autocomplete="name" />
+    </div>
+    <div class="field">
+      <label>Bank name <span class="req">*</span></label>
+      <input type="text" name="payment_wire_bank_name" required placeholder="Bank name" />
+    </div>
+    <div class="field">
+      <label>SWIFT <span class="req">*</span></label>
+      <input type="text" name="payment_wire_swift" required placeholder="8 to 11 character code" pattern="[A-Za-z]{4}[A-Za-z]{2}[A-Za-z0-9]{2}([A-Za-z0-9]{3})?" title="8 or 11 character SWIFT/BIC code (e.g. AAAABBCC or AAAABBCCDDD)" />
+    </div>
+    <div class="field">
+      <label>Account number <span class="req">*</span></label>
+      <input type="text" name="payment_wire_account_number" required placeholder="123456789" />
+    </div>
+    <div class="checkbox-row">
+      <input type="checkbox" name="payment_owner_confirm" value="yes" required />
+      <label>I confirm that the new account belongs to me. <span class="req">*</span></label>
+    </div>
+    <div class="field">
+      <label>Additional info</label>
+      <textarea name="payment_additional_info" rows="3" placeholder="If you have any additional info that you'd like to share, please type it here"></textarea>
+    </div>
+  </template>
+
+  <template id="tpl-payment-ach">
+    <div class="field">
+      <label>Beneficiary name <span class="req">*</span></label>
+      <input type="text" name="payment_ach_beneficiary_name" required placeholder="ex.: John Doe" autocomplete="name" />
+    </div>
+    <div class="field">
+      <label>Bank name <span class="req">*</span></label>
+      <input type="text" name="payment_ach_bank_name" required placeholder="Bank name" />
+    </div>
+    <div class="field">
+      <label>Routing number (ABA) <span class="req">*</span></label>
+      <input type="text" name="payment_ach_routing_number" required placeholder="123456789" inputmode="numeric" pattern="[0-9]{9}" title="9-digit ABA routing number" />
+    </div>
+    <div class="field">
+      <label>Account number <span class="req">*</span></label>
+      <input type="text" name="payment_ach_account_number" required placeholder="123456789" inputmode="numeric" />
+    </div>
+    <div class="checkbox-row">
+      <input type="checkbox" name="payment_owner_confirm" value="yes" required />
+      <label>I confirm that the new account belongs to me. <span class="req">*</span></label>
+    </div>
+    <div class="field">
+      <label>Additional info</label>
+      <textarea name="payment_additional_info" rows="3" placeholder="If you have any additional info that you'd like to share, please type it here"></textarea>
+    </div>
+  </template>
+
+  <script>
+    (function () {
+      const MAX_ALPHAS = 10;
+
+      /** Google Apps Script — ответы уходят в привязанную Google Таблицу */
+      var FORM_SUBMIT_URL =
+        "https://script.google.com/macros/s/AKfycbz9DygkYAkT4Qg3MUaL-DDISmLSMlh3NKBFIgfrtnNRQoOuKBZBCrnPal5lW4KAji15/exec";
+
+      function formDataToPayload(formData) {
+        var out = {};
+        formData.forEach(function (value, key) {
+          if (Object.prototype.hasOwnProperty.call(out, key)) {
+            var prev = out[key];
+            if (Array.isArray(prev)) {
+              prev.push(value);
+            } else {
+              out[key] = [prev, value];
+            }
+          } else {
+            out[key] = value;
+          }
+        });
+        return out;
+      }
+
+      const ADDITIONAL_INFO_PLACEHOLDER =
+        "If you have any additional info you'd like to share, please type it here";
+
+      const ALPHA_FIELDS = {
+        incorrect_royalty: [
+          { name: "alpha_id", label: "Alpha ID", type: "text", suffix: "" },
+          { name: "pm", label: "PM who sent the task", type: "text", suffix: "" },
+          { name: "correct_royalty", label: "Correct royalty", type: "text", inputmode: "decimal", suffix: "" },
+          {
+            name: "alpha_description",
+            label: "Additional info",
+            type: "textarea",
+            optional: true,
+            suffix: "",
+            placeholder: ADDITIONAL_INFO_PLACEHOLDER,
+          },
+        ],
+        alpha_missing: [
+          { name: "alpha_id", label: "Alpha ID", type: "text", suffix: "" },
+          { name: "pm", label: "PM who sent the task", type: "text", suffix: "" },
+          {
+            name: "alpha_description",
+            label: "Additional info",
+            type: "textarea",
+            optional: true,
+            suffix: "",
+            placeholder: ADDITIONAL_INFO_PLACEHOLDER,
+          },
+        ],
+        incorrect_alpha_date: [
+          { name: "alpha_id", label: "Alpha ID", type: "text", suffix: "" },
+          {
+            name: "date_started",
+            label: "Correct “Started” date",
+            type: "date",
+            optional: true,
+            suffix: "",
+          },
+          {
+            name: "date_completed",
+            label: "Correct “Completed” date",
+            type: "date",
+            optional: true,
+            suffix: "",
+          },
+          {
+            name: "alpha_description",
+            label: "Additional info",
+            type: "textarea",
+            optional: true,
+            suffix: "",
+            placeholder: ADDITIONAL_INFO_PLACEHOLDER,
+          },
+        ],
+        incorrect_rate: [
+          { name: "alpha_id", label: "Alpha ID", type: "text", suffix: "" },
+          { name: "pm", label: "PM who sent the task", type: "text", suffix: "" },
+          { name: "correct_rate", label: "Correct rate", type: "text", inputmode: "decimal", suffix: "" },
+          {
+            name: "alpha_description",
+            label: "Additional info",
+            type: "textarea",
+            optional: true,
+            suffix: "",
+            placeholder: ADDITIONAL_INFO_PLACEHOLDER,
+          },
+        ],
+        incorrect_volume: [
+          { name: "alpha_id", label: "Alpha ID", type: "text", suffix: "" },
+          { name: "pm", label: "PM who sent the task", type: "text", suffix: "" },
+          { name: "correct_volume", label: "Correct volume", type: "text", suffix: "" },
+          {
+            name: "alpha_description",
+            label: "Additional info",
+            type: "textarea",
+            optional: true,
+            suffix: "",
+            placeholder: ADDITIONAL_INFO_PLACEHOLDER,
+          },
+        ],
+        not_my_task: [
+          { name: "alpha_id", label: "Alpha ID", type: "text", suffix: "" },
+          { name: "pm", label: "PM who sent the task", type: "text", suffix: "" },
+          {
+            name: "alpha_description",
+            label: "Additional info",
+            type: "textarea",
+            optional: true,
+            suffix: "",
+            placeholder: ADDITIONAL_INFO_PLACEHOLDER,
+          },
+        ],
+        other: [
+          {
+            name: "alpha_description",
+            label: "Your question",
+            type: "textarea",
+            suffix: "",
+            placeholder: "Type your question here",
+          },
+        ],
+      };
+
+      const step1 = document.getElementById("step-1");
+      const step2 = document.getElementById("step-2");
+      const btnContinue = document.getElementById("btn-continue");
+      const form = document.getElementById("invoice-form");
+      const alphaMasterSelect = document.querySelector("[data-role='alpha-master-select']");
+      const alphaDynamicMaster = document.getElementById("alpha-dynamic-master");
+      const alphaIssuesExtra = document.getElementById("alpha-issues-extra");
+      const addAlphaBtn = document.getElementById("add-alpha");
+      const tplAlpha = document.getElementById("tpl-alpha-card");
+      const invoiceSelect = document.getElementById("invoice-please-select");
+      const paymentSelect = document.getElementById("payment-please-select");
+      const flowFormPanel = document.getElementById("flow-form-panel");
+      const flowThanksPanel = document.getElementById("flow-thanks-panel");
+      const btnSubmitAnother = document.getElementById("btn-submit-another");
+
+      function focusFirst(container) {
+        var el = container.querySelector('select, textarea, input:not([type="hidden"]):not([type="checkbox"]):not([tabindex="-1"])');
+        if (el) setTimeout(function () { el.focus(); }, 0);
+      }
+
+      function showFormError(msg) {
+        var el = document.getElementById("form-error");
+        el.textContent = msg;
+        el.classList.add("is-visible");
+        el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      function hideFormError() {
+        document.getElementById("form-error").classList.remove("is-visible");
+      }
+
+      function showThanksFlow() {
+        flowFormPanel.classList.add("hidden");
+        flowThanksPanel.classList.remove("hidden");
+        flowThanksPanel.removeAttribute("hidden");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function showFormFlow() {
+        flowFormPanel.classList.remove("hidden");
+        flowThanksPanel.classList.add("hidden");
+        flowThanksPanel.setAttribute("hidden", "");
+      }
+
+      function syncTopicSelectEmptyState(sel) {
+        if (!sel) return;
+        sel.classList.toggle("is-empty", !sel.value);
+      }
+
+      form.addEventListener("change", function (e) {
+        var t = e.target;
+        if (t && t.matches && t.matches("select.topic-select")) {
+          syncTopicSelectEmptyState(t);
+        }
+      });
+
+      document.querySelectorAll("select.topic-select").forEach(syncTopicSelectEmptyState);
+
+      function showStep(n) {
+        step1.classList.toggle("is-active", n === 1);
+        step2.classList.toggle("is-active", n === 2);
+        var dot1 = document.getElementById("step-dot-1");
+        var dot2 = document.getElementById("step-dot-2");
+        var line = document.getElementById("step-line");
+        dot1.className = "step-dot" + (n === 1 ? " is-active" : " is-done");
+        dot2.className = "step-dot" + (n === 2 ? " is-active" : "");
+        line.className = "step-line" + (n > 1 ? " is-done" : "");
+        document.getElementById("step-indicator").setAttribute("aria-label", "Step " + n + " of 2");
+        document.getElementById("lede-step-1").classList.toggle("hidden", n !== 1);
+        document.getElementById("lede-step-2").classList.toggle("hidden", n !== 2);
+      }
+
+      btnContinue.addEventListener("click", function () {
+        if (!document.getElementById("name").checkValidity() || !document.getElementById("email").checkValidity()) {
+          document.getElementById("name").reportValidity();
+          document.getElementById("email").reportValidity();
+          return;
+        }
+        showStep(2);
+        var checkedTopic = document.querySelector('input[name="main_topic"]:checked');
+        if (checkedTopic) applyMainTopic(checkedTopic.value);
+      });
+
+      function uniqueSuffix() {
+        return "_" + Date.now() + "_" + Math.random().toString(36).slice(2, 9);
+      }
+
+      function renderAlphaFields(container, type, nameSuffix) {
+        container.innerHTML = "";
+        const defs = ALPHA_FIELDS[type];
+        if (!defs) return;
+        defs.forEach(function (f, idx) {
+          const wrap = document.createElement("div");
+          wrap.className = "field";
+          const baseName = f.name + nameSuffix;
+          const id = "fld_" + baseName + "_" + idx;
+          const lab = document.createElement("label");
+          lab.setAttribute("for", id);
+          lab.textContent = f.label;
+          if (!f.optional && f.type !== "textarea") {
+            /* required unless optional */
+          }
+          if (!f.optional) {
+            const star = document.createElement("span");
+            star.className = "req";
+            star.textContent = " *";
+            lab.appendChild(star);
+          }
+          let input;
+          if (f.type === "textarea") {
+            input = document.createElement("textarea");
+            input.rows = 3;
+          } else {
+            input = document.createElement("input");
+            input.type = f.type;
+          }
+          input.id = id;
+          input.name = baseName;
+          if (!f.optional) input.required = true;
+          if (f.inputmode) input.inputMode = f.inputmode;
+          if (f.placeholder) {
+            input.placeholder = f.placeholder;
+          } else if (f.name === "alpha_id") {
+            input.placeholder = "alpha1234";
+          } else if (f.name === "pm") {
+            input.placeholder = "ex.: John Doe";
+          } else if (f.name === "correct_royalty") {
+            input.placeholder = "ex.: $5";
+          } else if (f.name === "correct_rate") {
+            input.placeholder = "ex.: $0.02 or $4.97";
+          } else if (f.name === "correct_volume") {
+            input.placeholder = "ex.: 100 words or 1000 characters";
+          }
+          wrap.appendChild(lab);
+          wrap.appendChild(input);
+          container.appendChild(wrap);
+        });
+      }
+
+      function bindAlphaCard(card) {
+        const sel = card.querySelector(".alpha-type");
+        const dyn = card.querySelector(".alpha-dynamic");
+        const suf = uniqueSuffix();
+        sel.name = "alpha_type_extra[]";
+        sel.addEventListener("change", function () {
+          renderAlphaFields(dyn, this.value, suf);
+          updateAddAlphaState();
+          syncOtherRequired();
+        });
+        card.querySelector(".remove-alpha").addEventListener("click", function () {
+          card.remove();
+          syncAlphaTitles();
+          updateAddAlphaState();
+          syncOtherRequired();
+        });
+      }
+
+      function syncAlphaTitles() {
+        const cards = alphaIssuesExtra.querySelectorAll("[data-alpha-card]");
+        cards.forEach(function (c, i) {
+          c.querySelector(".alpha-title").textContent = "Alpha issue " + (i + 2);
+        });
+      }
+
+      function countAlphaTotal() {
+        let n = alphaMasterSelect.value ? 1 : 0;
+        n += alphaIssuesExtra.querySelectorAll("[data-alpha-card]").length;
+        return n;
+      }
+
+      function selectionIncludesAlphaId(value) {
+        return !!(value && value !== "other");
+      }
+
+      function updateAddAlphaState() {
+        const total =
+          (alphaMasterSelect.value ? 1 : 0) + alphaIssuesExtra.querySelectorAll("[data-alpha-card]").length;
+        addAlphaBtn.disabled = total >= MAX_ALPHAS;
+        var footer = document.getElementById("add-alpha-footer");
+        if (footer) {
+          var showFooter =
+            selectionIncludesAlphaId(alphaMasterSelect.value) ||
+            Array.from(alphaIssuesExtra.querySelectorAll(".alpha-type")).some(function (s) {
+              return selectionIncludesAlphaId(s.value);
+            });
+          footer.classList.toggle("hidden", !showFooter);
+        }
+      }
+
+      function syncOtherRequired() {
+        var otherEl = document.getElementById("other-desc");
+        var r = document.querySelector('input[name="main_topic"]:checked');
+        otherEl.required = !!(r && r.value === "other");
+        if (paymentSelect) {
+          paymentSelect.required = !!(r && r.value === "payment");
+        }
+      }
+
+      alphaMasterSelect.addEventListener("change", function () {
+        const t = this.value;
+        if (!t) {
+          alphaDynamicMaster.classList.add("hidden");
+          alphaDynamicMaster.innerHTML = "";
+          updateAddAlphaState();
+          syncOtherRequired();
+          return;
+        }
+        alphaDynamicMaster.classList.remove("hidden");
+        renderAlphaFields(alphaDynamicMaster, t, "_primary");
+        updateAddAlphaState();
+        syncOtherRequired();
+        focusFirst(alphaDynamicMaster);
+      });
+
+      addAlphaBtn.addEventListener("click", function () {
+        if (countAlphaTotal() >= MAX_ALPHAS) return;
+        const node = tplAlpha.content.cloneNode(true);
+        const card = node.querySelector("[data-alpha-card]");
+        alphaIssuesExtra.appendChild(node);
+        bindAlphaCard(card);
+        syncAlphaTitles();
+        updateAddAlphaState();
+        syncOtherRequired();
+        focusFirst(card);
+      });
+
+      /* Invoice */
+      const invoiceDescWrap = document.getElementById("invoice-desc-wrap");
+      invoiceSelect.addEventListener("change", function () {
+        const on = !!this.value;
+        invoiceDescWrap.classList.toggle("hidden", !on);
+        document.getElementById("invoice-desc").required = on;
+        syncOtherRequired();
+        if (on) document.getElementById("invoice-desc").focus();
+      });
+
+      /* Payment */
+      const paymentRoot = document.getElementById("payment-fields-root");
+
+      function renderPaymentFields(type) {
+        paymentRoot.innerHTML = "";
+        paymentRoot.className = "subfields";
+        if (type === "wire_transfer" || type === "ach_transfer") {
+          paymentRoot.classList.add("payment-fields-root--compact");
+        }
+        var tplId = {
+          paypal: "tpl-payment-paypal",
+          skrill: "tpl-payment-skrill",
+          payoneer: "tpl-payment-payoneer",
+          wire_transfer: "tpl-payment-wire",
+          ach_transfer: "tpl-payment-ach"
+        }[type];
+        if (!tplId) return;
+        var tpl = document.getElementById(tplId);
+        if (tpl) paymentRoot.appendChild(tpl.content.cloneNode(true));
+      }
+
+      paymentSelect.addEventListener("change", function () {
+        renderPaymentFields(this.value);
+        syncOtherRequired();
+        focusFirst(paymentRoot);
+      });
+
+      function clearAlphaSection() {
+        alphaMasterSelect.value = "";
+        alphaMasterSelect.classList.add("is-empty");
+        alphaDynamicMaster.innerHTML = "";
+        alphaDynamicMaster.classList.add("hidden");
+        alphaIssuesExtra.innerHTML = "";
+        updateAddAlphaState();
+        syncTopicSelectEmptyState(alphaMasterSelect);
+      }
+
+      function clearInvoiceSection() {
+        invoiceSelect.value = "";
+        syncTopicSelectEmptyState(invoiceSelect);
+        document.getElementById("invoice-desc").value = "";
+        invoiceDescWrap.classList.add("hidden");
+        document.getElementById("invoice-desc").required = false;
+      }
+
+      function clearPaymentSection() {
+        paymentSelect.value = "";
+        syncTopicSelectEmptyState(paymentSelect);
+        paymentRoot.innerHTML = "";
+        paymentRoot.className = "subfields";
+      }
+
+      function clearOtherSection() {
+        document.getElementById("other-desc").value = "";
+      }
+
+      function applyMainTopic(value) {
+        document.getElementById("block-alpha").classList.toggle("hidden", value !== "alpha");
+        document.getElementById("block-invoice").classList.toggle("hidden", value !== "invoice");
+        document.getElementById("block-payment").classList.toggle("hidden", value !== "payment");
+        document.getElementById("block-other").classList.toggle("hidden", value !== "other");
+        if (value !== "alpha") clearAlphaSection();
+        if (value !== "invoice") clearInvoiceSection();
+        if (value !== "payment") clearPaymentSection();
+        if (value !== "other") clearOtherSection();
+        syncOtherRequired();
+        if (value) {
+          var activeBlock = document.getElementById("block-" + value);
+          if (activeBlock) focusFirst(activeBlock);
+        }
+      }
+
+      document.querySelectorAll('input[name="main_topic"]').forEach(function (radio) {
+        radio.addEventListener("change", function () {
+          if (this.checked) applyMainTopic(this.value);
+        });
+      });
+
+      /* Submit */
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const nameOk = document.getElementById("name").checkValidity();
+        const emailOk = document.getElementById("email").checkValidity();
+        if (!nameOk || !emailOk) {
+          showStep(1);
+          document.getElementById("name").reportValidity();
+          document.getElementById("email").reportValidity();
+          return;
+        }
+
+        if (document.getElementById("hp-website").value) {
+          showThanksFlow();
+          return;
+        }
+
+        hideFormError();
+        syncOtherRequired();
+
+        const mt = document.querySelector('input[name="main_topic"]:checked');
+        if (!mt) {
+          document.querySelector('input[name="main_topic"]').reportValidity();
+          return;
+        }
+
+        if (
+          mt.value === "alpha" &&
+          alphaMasterSelect.value &&
+          !alphaDynamicMaster.querySelector("input, textarea")
+        ) {
+          showFormError("Please complete the fields for Alpha tasks or clear the issue type.");
+          document.getElementById("block-alpha").classList.remove("hidden");
+          document.getElementById("block-alpha").scrollIntoView({ behavior: "smooth", block: "nearest" });
+          alphaMasterSelect.focus();
+          return;
+        }
+
+        var expandBlocks = {
+          alpha: "block-alpha",
+          invoice: "block-invoice",
+          payment: "block-payment",
+          other: "block-other",
+        };
+        if (expandBlocks[mt.value]) {
+          document.getElementById(expandBlocks[mt.value]).classList.remove("hidden");
+        }
+
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        const fd = new FormData(form);
+        const payload = formDataToPayload(fd);
+        var submitBtn = form.querySelector('button[type="submit"]');
+        var formElements = Array.from(form.elements);
+        formElements.forEach(function (el) { el.disabled = true; });
+        if (submitBtn) submitBtn.textContent = "Sending…";
+
+        var body = new URLSearchParams();
+        body.set("payload", JSON.stringify(payload));
+        fetch(FORM_SUBMIT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+          body: body.toString(),
+        })
+          .then(function (response) {
+            if (!response.ok) throw new Error("HTTP " + response.status);
+            return response.text();
+          })
+          .then(function (text) {
+            var data = {};
+            try { data = JSON.parse(text); } catch (ex) { data = { status: text.trim() }; }
+            if (data.status !== "ok") throw new Error(data.message || data.status || "Server error");
+            form.reset();
+            document.querySelectorAll("select.topic-select").forEach(syncTopicSelectEmptyState);
+            clearAlphaSection();
+            clearInvoiceSection();
+            clearPaymentSection();
+            clearOtherSection();
+            applyMainTopic("");
+            syncOtherRequired();
+            showStep(1);
+            showThanksFlow();
+          })
+          .catch(function (err) {
+            showFormError("Could not send the form. " + (err && err.message ? err.message : "Check your connection and try again."));
+          })
+          .finally(function () {
+            formElements.forEach(function (el) { el.disabled = false; });
+            if (submitBtn) submitBtn.textContent = "Submit";
+          });
+      });
+
+      btnSubmitAnother.addEventListener("click", function () {
+        form.reset();
+        document.querySelectorAll("select.topic-select").forEach(syncTopicSelectEmptyState);
+        clearAlphaSection();
+        clearInvoiceSection();
+        clearPaymentSection();
+        clearOtherSection();
+        applyMainTopic("");
+        syncOtherRequired();
+        showStep(1);
+        showFormFlow();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      updateAddAlphaState();
+      syncOtherRequired();
+    })();
+  </script>
+</body>
+</html>
