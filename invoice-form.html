@@ -611,7 +611,7 @@
       <div class="step is-active" id="step-1" data-step="1">
         <div class="field">
           <label for="name">Your name <span class="req">*</span></label>
-          <input type="text" id="name" name="your_name" required autocomplete="name" placeholder="ex.: John Doe" />
+          <input type="text" id="name" name="your_name" required autocomplete="name" placeholder="Name Surname" />
         </div>
         <div class="field">
           <label for="email">Your email <span class="req">*</span></label>
@@ -853,7 +853,7 @@
   <template id="tpl-payment-wire">
     <div class="field">
       <label>Beneficiary name <span class="req">*</span></label>
-      <input type="text" name="payment_wire_beneficiary_name" required placeholder="ex.: John Doe" autocomplete="name" />
+      <input type="text" name="payment_wire_beneficiary_name" required placeholder="Name Surname" autocomplete="name" />
     </div>
     <div class="field">
       <label>Bank name <span class="req">*</span></label>
@@ -880,7 +880,7 @@
   <template id="tpl-payment-ach">
     <div class="field">
       <label>Beneficiary name <span class="req">*</span></label>
-      <input type="text" name="payment_ach_beneficiary_name" required placeholder="ex.: John Doe" autocomplete="name" />
+      <input type="text" name="payment_ach_beneficiary_name" required placeholder="Name Surname" autocomplete="name" />
     </div>
     <div class="field">
       <label>Bank name <span class="req">*</span></label>
@@ -1161,7 +1161,7 @@
           } else if (f.name === "alpha_id") {
             input.placeholder = "alpha1234";
           } else if (f.name === "pm") {
-            input.placeholder = "ex.: John Doe";
+            input.placeholder = "Name Surname";
           } else if (f.name === "correct_royalty") {
             input.placeholder = "ex.: $5";
           } else if (f.name === "correct_rate") {
