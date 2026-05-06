@@ -739,7 +739,6 @@
                         (minimum EUR 50)
                       </li>
                       <li>Wire Transfer (minimum USD 500)</li>
-                      <li>ACH to U.S. bank and Wise (no minimum)</li>
                     </ul>
                   </div>
                   <div class="field">
@@ -750,7 +749,6 @@
                       <option value="skrill">Skrill</option>
                       <option value="payoneer">Payoneer</option>
                       <option value="wire_transfer">Wire transfer</option>
-                      <option value="ach_transfer">ACH transfer (to U.S banks, Wise, Revolut accounts etc.)</option>
                     </select>
                   </div>
                   <div id="payment-fields-root" class="subfields"></div>
@@ -878,8 +876,12 @@
       <input type="text" name="payment_wire_bank_name" required placeholder="Bank name" />
     </div>
     <div class="field">
-      <label>SWIFT <span class="req">*</span></label>
-      <input type="text" name="payment_wire_swift" required placeholder="8 to 11 character code" pattern="[A-Za-z]{4}[A-Za-z]{2}[A-Za-z0-9]{2}([A-Za-z0-9]{3})?" title="8 or 11 character SWIFT/BIC code (e.g. AAAABBCC or AAAABBCCDDD)" />
+      <label>SWIFT</label>
+      <input type="text" name="payment_wire_swift" placeholder="8 to 11 character code" pattern="[A-Za-z]{4}[A-Za-z]{2}[A-Za-z0-9]{2}([A-Za-z0-9]{3})?" title="8 or 11 character SWIFT/BIC code (e.g. AAAABBCC or AAAABBCCDDD)" />
+    </div>
+    <div class="field">
+      <label>Routing number (ABA)</label>
+      <input type="text" name="payment_wire_routing_number" placeholder="123456789" inputmode="numeric" pattern="[0-9]{9}" title="9-digit ABA routing number" />
     </div>
     <div class="field">
       <label>Account number <span class="req">*</span></label>
@@ -895,32 +897,6 @@
     </div>
   </template>
 
-  <template id="tpl-payment-ach">
-    <div class="field">
-      <label>Beneficiary name <span class="req">*</span></label>
-      <input type="text" name="payment_ach_beneficiary_name" required placeholder="Name Surname" autocomplete="name" />
-    </div>
-    <div class="field">
-      <label>Bank name <span class="req">*</span></label>
-      <input type="text" name="payment_ach_bank_name" required placeholder="Bank name" />
-    </div>
-    <div class="field">
-      <label>Routing number (ABA) <span class="req">*</span></label>
-      <input type="text" name="payment_ach_routing_number" required placeholder="123456789" inputmode="numeric" pattern="[0-9]{9}" title="9-digit ABA routing number" />
-    </div>
-    <div class="field">
-      <label>Account number <span class="req">*</span></label>
-      <input type="text" name="payment_ach_account_number" required placeholder="123456789" inputmode="numeric" />
-    </div>
-    <div class="checkbox-row">
-      <input type="checkbox" name="payment_owner_confirm" value="yes" required />
-      <label>I confirm that the new account belongs to me. <span class="req">*</span></label>
-    </div>
-    <div class="field">
-      <label>Additional info</label>
-      <textarea name="payment_additional_info" rows="3" placeholder="If you have any additional info that you'd like to share, please type it here"></textarea>
-    </div>
-  </template>
 
   <script>
     (function () {
@@ -1299,15 +1275,14 @@
       function renderPaymentFields(type) {
         paymentRoot.innerHTML = "";
         paymentRoot.className = "subfields";
-        if (type === "wire_transfer" || type === "ach_transfer") {
+        if (type === "wire_transfer") {
           paymentRoot.classList.add("payment-fields-root--compact");
         }
         var tplId = {
           paypal: "tpl-payment-paypal",
           skrill: "tpl-payment-skrill",
           payoneer: "tpl-payment-payoneer",
-          wire_transfer: "tpl-payment-wire",
-          ach_transfer: "tpl-payment-ach"
+          wire_transfer: "tpl-payment-wire"
         }[type];
         if (!tplId) return;
         var tpl = document.getElementById(tplId);
