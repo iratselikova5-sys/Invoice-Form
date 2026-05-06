@@ -1160,6 +1160,7 @@
           renderAlphaFields(dyn, this.value, suf);
           updateAddAlphaState();
           syncOtherRequired();
+          focusFirst(dyn);
         });
         card.querySelector(".remove-alpha").addEventListener("click", function () {
           card.remove();
