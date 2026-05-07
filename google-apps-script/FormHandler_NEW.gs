@@ -21,11 +21,11 @@ var FIELD_LABELS = {
   payment_paypal_email: 'PayPal email',
   payment_skrill_email: 'Skrill email',
   payment_payoneer_email: 'Payoneer email',
-  payment_wire_beneficiary_name: 'Wire — beneficiary',
-  payment_wire_bank_name: 'Wire — bank',
-  payment_wire_swift: 'Wire — SWIFT',
-  payment_wire_routing_number: 'Wire — routing (ABA)',
-  payment_wire_account_number: 'Wire — account',
+  payment_wire_beneficiary_name: 'Beneficiary name',
+  payment_wire_bank_name: 'Bank name',
+  payment_wire_swift: 'SWIFT',
+  payment_wire_routing_number: 'Routing number',
+  payment_wire_account_number: 'Account',
   payment_owner_confirm: 'Owner confirmed',
   payment_additional_info: 'Additional info',
   other_question_text: 'Question'
@@ -77,10 +77,6 @@ function doPost(e) {
     // Перенос по словам в details (5-я колонка)
     var lastRow = sheet.getLastRow();
     sheet.getRange(lastRow, 5).setWrap(true).setVerticalAlignment('top');
-
-    try { sendConfirmationEmail_(payload, details); } catch (mailErr) {
-      Logger.log('Email error: ' + mailErr);
-    }
 
     return jsonOut_('ok');
   } catch (err) {
@@ -173,52 +169,6 @@ function formatDetails_(payload) {
   return lines.join('\n');
 }
 
-// Отправитель должен быть добавлен как псевдоним в настройках Gmail аккаунта,
-// от имени которого развёрнут скрипт (Gmail → Settings → Accounts → Send mail as).
-var CONFIRMATION_FROM    = 'noreplyvendors@alconost.com';
-var CONFIRMATION_REPLYTO = 'vendors@alconost.com';
-
-function sendConfirmationEmail_(payload, details) {
-  var to = payload.your_email;
-  if (!to) return;
-
-  var topic = TOPIC_LABELS[payload.main_topic] || payload.main_topic || '—';
-
-  var copyText = 'Name: '  + (payload.your_name  || '') + '\n' +
-                 'Email: ' + (payload.your_email || '') + '\n' +
-                 'Topic: ' + topic;
-  if (details) copyText += '\n' + details;
-
-  var plain = 'Hello,\n\n' +
-    'Thank you for filling out the form. We\'ve successfully received your submission.\n\n' +
-    'This is an automated email, so please do not reply to this message.\n\n' +
-    'Here is a copy of the information you provided:\n\n' +
-    copyText + '\n\n' +
-    'Our team will review your request and get back to you as soon as possible.\n\n' +
-    'If you have any additional questions, feel free to contact us at ' + CONFIRMATION_REPLYTO + '.\n\n' +
-    'Best regards,\n' +
-    'Vendor Management Team\n' +
-    'alconost.com';
-
-  var copyHtml = copyText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-
-  var html = '<p>Hello,</p>' +
-    '<p>Thank you for filling out the form. We\'ve successfully received your submission.</p>' +
-    '<p><em>This is an automated email, so please do not reply to this message.</em></p>' +
-    '<p>Here is a copy of the information you provided:</p>' +
-    '<p style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:12px 16px;font-family:monospace;font-size:13px;line-height:1.6">' + copyHtml + '</p>' +
-    '<p>Our team will review your request and get back to you as soon as possible.</p>' +
-    '<p>If you have any additional questions, feel free to contact us at ' +
-    '<a href="mailto:' + CONFIRMATION_REPLYTO + '">' + CONFIRMATION_REPLYTO + '</a>.</p>' +
-    '<p>Best regards,<br>Vendor Management Team<br>alconost.com</p>';
-
-  GmailApp.sendEmail(to, 'We\'ve Received Your Submission', plain, {
-    from:    CONFIRMATION_FROM,
-    name:    'Vendor Management Team',
-    replyTo: CONFIRMATION_REPLYTO,
-    htmlBody: html
-  });
-}
 
 function str_(v) {
   return (v !== null && v !== undefined && String(v).trim() !== '') ? String(v).trim() : null;
