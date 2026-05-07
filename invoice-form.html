@@ -921,6 +921,68 @@
             out[key] = value;
           }
         });
+        return normalizeAlphaFields(out);
+      }
+
+      function normalizeAlphaFields(payload) {
+        var ALPHA_BASES = [
+          'alpha_id', 'pm', 'correct_royalty', 'alpha_description',
+          'date_started', 'date_completed', 'correct_rate', 'correct_volume'
+        ];
+        var extraSuffixRe = /^_\d+_[a-z0-9]+$/;
+
+        // Collect extra suffixes in DOM order
+        var extraSuffixes = [];
+        var suffixSeen = {};
+        Object.keys(payload).forEach(function (key) {
+          ALPHA_BASES.forEach(function (base) {
+            if (key.indexOf(base) === 0) {
+              var suffix = key.slice(base.length);
+              if (suffix !== '_primary' && !suffixSeen[suffix] && extraSuffixRe.test(suffix)) {
+                suffixSeen[suffix] = true;
+                extraSuffixes.push(suffix);
+              }
+            }
+          });
+        });
+
+        var out = {};
+        Object.keys(payload).forEach(function (key) {
+          var val = payload[key];
+
+          if (key === 'alpha_primary_type') {
+            out['alpha_type_1'] = val;
+            return;
+          }
+
+          if (key === 'alpha_type_extra[]') {
+            var types = Array.isArray(val) ? val : [val];
+            types.forEach(function (t, i) { out['alpha_type_' + (i + 2)] = t; });
+            return;
+          }
+
+          var matched = false;
+          ALPHA_BASES.forEach(function (base) {
+            if (key === base + '_primary') {
+              out[base + '_1'] = val;
+              matched = true;
+            }
+          });
+          if (matched) return;
+
+          ALPHA_BASES.forEach(function (base) {
+            extraSuffixes.forEach(function (suffix, idx) {
+              if (key === base + suffix) {
+                out[base + '_' + (idx + 2)] = val;
+                matched = true;
+              }
+            });
+          });
+          if (matched) return;
+
+          out[key] = val;
+        });
+
         return out;
       }
 
