@@ -675,7 +675,7 @@
                 <span class="topic-choice-arrow" aria-hidden="true">›</span>
               </label>
               <div class="topic-block hidden" id="block-alpha" data-topic="alpha">
-                <div class="topic-panel" id="panel-alpha" role="region">
+                <div class="topic-panel" id="panel-alpha" role="region" aria-label="Alpha tasks">
                   <div class="field">
                     <label for="alpha-please-select">Please select your question</label>
                     <select id="alpha-please-select" name="alpha_primary_type" class="topic-select is-empty" data-role="alpha-master-select">
@@ -706,7 +706,7 @@
                 <span class="topic-choice-arrow" aria-hidden="true">›</span>
               </label>
               <div class="topic-block hidden" id="block-invoice" data-topic="invoice">
-                <div class="topic-panel" id="panel-invoice" role="region">
+                <div class="topic-panel" id="panel-invoice" role="region" aria-label="Invoice / Payment">
                   <div class="callout" role="note">
                     <p><strong>Payment period:</strong> Between the 20th and 25th of the month for all tasks performed in the previous month.</p>
                     <p class="callout-gap"><strong>Payout limits:</strong></p>
@@ -755,7 +755,7 @@
                 <span class="topic-choice-arrow" aria-hidden="true">›</span>
               </label>
               <div class="topic-block hidden" id="block-payment" data-topic="payment">
-                <div class="topic-panel" id="panel-payment" role="region">
+                <div class="topic-panel" id="panel-payment" role="region" aria-label="Payment details update">
                   <div class="callout" role="note">
                     <p class="callout-gap"><strong>Payout limits:</strong></p>
                     <ul class="callout-ul">
@@ -794,7 +794,7 @@
                 <span class="topic-choice-arrow" aria-hidden="true">›</span>
               </label>
               <div class="topic-block hidden" id="block-other" data-topic="other">
-                <div class="topic-panel" id="panel-other" role="region">
+                <div class="topic-panel" id="panel-other" role="region" aria-label="Other questions">
                   <p class="hint" style="margin-top: 0">Ask anything that doesn’t fit the topics above.</p>
                   <div class="field">
                     <label for="other-desc">Your question <span class="req">*</span></label>
@@ -904,11 +904,11 @@
     </div>
     <div class="field">
       <label>Bank name <span class="req">*</span></label>
-      <input type="text" name="payment_wire_bank_name" required placeholder="Bank name" />
+      <input type="text" name="payment_wire_bank_name" required placeholder="Bank name" autocomplete="off" />
     </div>
     <div class="field">
       <label>SWIFT <span class="optional-label">— required if no Routing number</span> <span class="req">*</span></label>
-      <input type="text" name="payment_wire_swift" placeholder="8 to 11 character code" pattern="[A-Za-z]{4}[A-Za-z]{2}[A-Za-z0-9]{2}([A-Za-z0-9]{3})?" title="8 or 11 character SWIFT/BIC code (e.g. AAAABBCC or AAAABBCCDDD)" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" />
+      <input type="text" name="payment_wire_swift" placeholder="8 to 11 character code" pattern="[A-Za-z]{4}[A-Za-z]{2}[A-Za-z0-9]{2}([A-Za-z0-9]{3})?" title="8 or 11 character SWIFT/BIC code (e.g. AAAABBCC or AAAABBCCDDD)" autocomplete="off" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" />
     </div>
     <div class="field">
       <label>Routing number <span class="optional-label">— required for ACH</span> <span class="req">*</span></label>
@@ -916,7 +916,7 @@
     </div>
     <div class="field">
       <label>Account number <span class="req">*</span></label>
-      <input type="text" name="payment_wire_account_number" required placeholder="123456789" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" />
+      <input type="text" name="payment_wire_account_number" required placeholder="123456789" autocomplete="off" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" />
     </div>
     <div class="checkbox-row">
       <input type="checkbox" name="payment_owner_confirm" value="yes" required />
