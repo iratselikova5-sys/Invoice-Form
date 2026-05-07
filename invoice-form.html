@@ -1025,7 +1025,7 @@
         incorrect_royalty: [
           { name: "alpha_id", label: "Alpha ID", type: "text", suffix: "" },
           { name: "pm", label: "Project Manager who sent the task", type: "text", suffix: "" },
-          { name: "correct_royalty", label: "Correct royalty", type: "text", inputmode: "decimal", suffix: "" },
+          { name: "correct_royalty", label: "Correct royalty", type: "text", inputmode: "decimal", prefix: "$", suffix: "" },
           {
             name: "alpha_description",
             label: "Additional info",
@@ -1075,7 +1075,7 @@
         incorrect_rate: [
           { name: "alpha_id", label: "Alpha ID", type: "text", suffix: "" },
           { name: "pm", label: "Project Manager who sent the task", type: "text", suffix: "" },
-          { name: "correct_rate", label: "Correct rate", type: "text", inputmode: "decimal", suffix: "" },
+          { name: "correct_rate", label: "Correct rate", type: "text", inputmode: "decimal", prefix: "$", suffix: "" },
           {
             name: "alpha_description",
             label: "Additional info",
@@ -1247,6 +1247,19 @@
           input.name = baseName;
           if (!f.optional) input.required = true;
           if (f.inputmode) input.inputMode = f.inputmode;
+          if (f.prefix) {
+            (function(pfx) {
+              input.addEventListener("input", function () {
+                var v = this.value;
+                if (v === "" || v === pfx) { this.value = ""; return; }
+                if (!v.startsWith(pfx)) {
+                  var pos = this.selectionStart;
+                  this.value = pfx + v;
+                  this.setSelectionRange(pos + pfx.length, pos + pfx.length);
+                }
+              });
+            })(f.prefix);
+          }
           if (f.placeholder) {
             input.placeholder = f.placeholder;
           } else if (f.name === "alpha_id") {
