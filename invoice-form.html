@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Invoice &amp; Payments — Alconost</title>
+  <link rel="icon" href="data:," />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -1249,6 +1250,14 @@
           if (f.inputmode) input.inputMode = f.inputmode;
           if (f.prefix) {
             (function(pfx) {
+              function guardCursor() {
+                var el = this;
+                setTimeout(function() {
+                  if (el.value.startsWith(pfx) && el.selectionStart < pfx.length) {
+                    el.setSelectionRange(pfx.length, pfx.length);
+                  }
+                }, 0);
+              }
               input.addEventListener("focus", function () {
                 if (this.value === "") {
                   this.value = pfx;
@@ -1267,6 +1276,8 @@
                   this.setSelectionRange(pos + pfx.length, pos + pfx.length);
                 }
               });
+              input.addEventListener("click", guardCursor);
+              input.addEventListener("keydown", guardCursor);
             })(f.prefix);
           }
           if (f.placeholder) {
