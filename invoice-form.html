@@ -1344,6 +1344,10 @@
         if (paymentSelect) {
           paymentSelect.required = !!(r && r.value === "payment");
         }
+        if (invoiceSelect) {
+          invoiceSelect.required = !!(r && r.value === "invoice");
+        }
+        alphaMasterSelect.required = !!(r && r.value === "alpha");
       }
 
       alphaMasterSelect.addEventListener("change", function () {
