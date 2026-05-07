@@ -593,13 +593,30 @@
       background: none;
       border: none;
       cursor: pointer;
-      padding: 0;
-      margin-bottom: 20px;
+      padding: 10px 4px;
+      margin-bottom: 10px;
+      min-height: 44px;
       font-family: inherit;
     }
 
     .btn-back:hover {
       color: var(--text);
+    }
+
+    @media (max-width: 600px) {
+      input[type="text"],
+      input[type="email"],
+      input[type="tel"],
+      input[type="number"],
+      input[type="date"],
+      textarea,
+      select {
+        font-size: 16px;
+      }
+
+      textarea {
+        resize: none;
+      }
     }
 
   </style>
@@ -662,7 +679,7 @@
                   <div class="field">
                     <label for="alpha-please-select">Please select your question</label>
                     <select id="alpha-please-select" name="alpha_primary_type" class="topic-select is-empty" data-role="alpha-master-select">
-                      <option value="">Click to choose</option>
+                      <option value="">Select...</option>
                       <option value="incorrect_royalty">Incorrect royalty</option>
                       <option value="alpha_missing">Alpha missing in the invoice</option>
                       <option value="incorrect_alpha_date">Incorrect alpha date</option>
@@ -711,7 +728,7 @@
                   <div class="field">
                     <label for="invoice-please-select">Please select your question</label>
                     <select id="invoice-please-select" name="invoice_issue_type" class="topic-select is-empty">
-                      <option value="">Click to choose</option>
+                      <option value="">Select...</option>
                       <option value="link_broken">The link to the invoice doesn’t work</option>
                       <option value="not_received">The payment is not received</option>
                       <option value="invoice_not_received">I didn’t receive the invoice email</option>
@@ -758,7 +775,7 @@
                   <div class="field">
                     <label for="payment-please-select">Please select your payment method</label>
                     <select id="payment-please-select" name="payment_method" class="topic-select is-empty">
-                      <option value="">Click to choose</option>
+                      <option value="">Select...</option>
                       <option value="paypal">Paypal</option>
                       <option value="skrill">Skrill</option>
                       <option value="payoneer">Payoneer</option>
@@ -821,7 +838,7 @@
       <div class="field">
         <label class="alpha-select-label">Please select your question</label>
         <select class="alpha-type topic-select is-empty" name="alpha_type_extra[]">
-          <option value="">Click to choose</option>
+          <option value="">Select...</option>
           <option value="incorrect_royalty">Incorrect royalty</option>
           <option value="alpha_missing">Alpha missing in the invoice</option>
           <option value="incorrect_alpha_date">Incorrect alpha date</option>
