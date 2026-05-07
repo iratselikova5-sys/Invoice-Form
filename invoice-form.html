@@ -1249,6 +1249,15 @@
           if (f.inputmode) input.inputMode = f.inputmode;
           if (f.prefix) {
             (function(pfx) {
+              input.addEventListener("focus", function () {
+                if (this.value === "") {
+                  this.value = pfx;
+                  this.setSelectionRange(pfx.length, pfx.length);
+                }
+              });
+              input.addEventListener("blur", function () {
+                if (this.value === pfx) this.value = "";
+              });
               input.addEventListener("input", function () {
                 var v = this.value;
                 if (v === "" || v === pfx) { this.value = ""; return; }
