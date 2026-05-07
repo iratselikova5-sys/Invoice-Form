@@ -1132,7 +1132,7 @@
         flowFormPanel.classList.add("hidden");
         flowThanksPanel.classList.remove("hidden");
         flowThanksPanel.removeAttribute("hidden");
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({ top: 0, behavior: "instant" });
       }
 
       function showFormFlow() {
@@ -1156,7 +1156,7 @@
       document.querySelectorAll("select.topic-select").forEach(syncTopicSelectEmptyState);
 
       function showStep(n) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({ top: 0, behavior: "instant" });
         step1.classList.toggle("is-active", n === 1);
         step2.classList.toggle("is-active", n === 2);
         var dot1 = document.getElementById("step-dot-1");
@@ -1538,7 +1538,7 @@
         syncOtherRequired();
         showStep(1);
         showFormFlow();
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({ top: 0, behavior: "instant" });
       });
 
       updateAddAlphaState();
