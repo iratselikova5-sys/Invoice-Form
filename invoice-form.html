@@ -1051,18 +1051,20 @@
         incorrect_alpha_date: [
           { name: "alpha_id", label: "Alpha ID", type: "text", suffix: "" },
           {
-            name: "date_started",
-            label: "Correct “Started” date",
-            type: "date",
+            name: “date_started”,
+            label: “Correct “Started” date”,
+            type: “date”,
             optional: true,
-            suffix: "",
+            hideOptionalLabel: true,
+            suffix: “”,
           },
           {
-            name: "date_completed",
-            label: "Correct “Completed” date",
-            type: "date",
+            name: “date_completed”,
+            label: “Correct “Completed” date”,
+            type: “date”,
             optional: true,
-            suffix: "",
+            hideOptionalLabel: true,
+            suffix: “”,
           },
           {
             name: "alpha_description",
@@ -1230,7 +1232,7 @@
             star.className = "req";
             star.textContent = " *";
             lab.appendChild(star);
-          } else {
+          } else if (!f.hideOptionalLabel) {
             const opt = document.createElement("span");
             opt.className = "optional-label";
             opt.textContent = "(optional)";
@@ -1310,6 +1312,14 @@
             pmHint.style.marginBottom = "0";
             pmHint.textContent = "Find it in the task email or Manager column in the invoice.";
             wrap.appendChild(pmHint);
+          }
+          if (f.name === "date_started") {
+            var dateHint = document.createElement("p");
+            dateHint.className = "hint";
+            dateHint.style.marginTop = "0";
+            dateHint.style.marginBottom = "4px";
+            dateHint.textContent = "Fill in only the date(s) that are incorrect — you don’t need to fill both.";
+            container.appendChild(dateHint);
           }
           container.appendChild(wrap);
         });
