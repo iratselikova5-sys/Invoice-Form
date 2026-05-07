@@ -1575,15 +1575,7 @@
             var data = {};
             try { data = JSON.parse(text); } catch (ex) { data = { status: text.trim() }; }
             if (data.status !== "ok") throw new Error("server_error");
-            form.reset();
-            document.querySelectorAll("select.topic-select").forEach(syncTopicSelectEmptyState);
-            clearAlphaSection();
-            clearInvoiceSection();
-            clearPaymentSection();
-            clearOtherSection();
-            applyMainTopic("");
-            syncOtherRequired();
-            showStep(1);
+            resetForm();
             showThanksFlow();
           })
           .catch(function (err) {
@@ -1601,6 +1593,11 @@
       });
 
       btnSubmitAnother.addEventListener("click", function () {
+        resetForm();
+        showFormFlow();
+      });
+
+      function resetForm() {
         form.reset();
         document.querySelectorAll("select.topic-select").forEach(syncTopicSelectEmptyState);
         clearAlphaSection();
@@ -1610,9 +1607,7 @@
         applyMainTopic("");
         syncOtherRequired();
         showStep(1);
-        showFormFlow();
-        window.scrollTo({ top: 0, behavior: "instant" });
-      });
+      }
 
       updateAddAlphaState();
       syncOtherRequired();
