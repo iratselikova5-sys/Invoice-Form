@@ -908,7 +908,7 @@
     </div>
     <div class="field">
       <label>SWIFT <span class="optional-label">— required if no Routing number</span> <span class="req">*</span></label>
-      <input type="text" name="payment_wire_swift" placeholder="8 to 11 character code" pattern="[A-Za-z]{4}[A-Za-z]{2}[A-Za-z0-9]{2}([A-Za-z0-9]{3})?" title="8 or 11 character SWIFT/BIC code (e.g. AAAABBCC or AAAABBCCDDD)" />
+      <input type="text" name="payment_wire_swift" placeholder="8 to 11 character code" pattern="[A-Za-z]{4}[A-Za-z]{2}[A-Za-z0-9]{2}([A-Za-z0-9]{3})?" title="8 or 11 character SWIFT/BIC code (e.g. AAAABBCC or AAAABBCCDDD)" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" />
     </div>
     <div class="field">
       <label>Routing number <span class="optional-label">— required for ACH</span> <span class="req">*</span></label>
@@ -916,7 +916,7 @@
     </div>
     <div class="field">
       <label>Account number <span class="req">*</span></label>
-      <input type="text" name="payment_wire_account_number" required placeholder="123456789" />
+      <input type="text" name="payment_wire_account_number" required placeholder="123456789" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" />
     </div>
     <div class="checkbox-row">
       <input type="checkbox" name="payment_owner_confirm" value="yes" required />
@@ -1222,9 +1222,6 @@
           const lab = document.createElement("label");
           lab.setAttribute("for", id);
           lab.textContent = f.label;
-          if (!f.optional && f.type !== "textarea") {
-            /* required unless optional */
-          }
           if (!f.optional) {
             const star = document.createElement("span");
             star.className = "req";
@@ -1548,19 +1545,24 @@
 
         var body = new URLSearchParams();
         body.set("payload", JSON.stringify(payload));
+
+        var abortCtrl = new AbortController();
+        var fetchTimeout = setTimeout(function () { abortCtrl.abort(); }, 45000);
+
         fetch(FORM_SUBMIT_URL, {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
           body: body.toString(),
+          signal: abortCtrl.signal,
         })
           .then(function (response) {
-            if (!response.ok) throw new Error("HTTP " + response.status);
+            if (!response.ok) throw new Error("http_error");
             return response.text();
           })
           .then(function (text) {
             var data = {};
             try { data = JSON.parse(text); } catch (ex) { data = { status: text.trim() }; }
-            if (data.status !== "ok") throw new Error(data.message || data.status || "Server error");
+            if (data.status !== "ok") throw new Error("server_error");
             form.reset();
             document.querySelectorAll("select.topic-select").forEach(syncTopicSelectEmptyState);
             clearAlphaSection();
@@ -1573,9 +1575,14 @@
             showThanksFlow();
           })
           .catch(function (err) {
-            showFormError("Could not send the form. " + (err && err.message ? err.message : "Check your connection and try again."));
+            if (err.name === "AbortError") {
+              showFormError("Request timed out. Please try again.");
+            } else {
+              showFormError("Could not send the form. Please check your connection and try again.");
+            }
           })
           .finally(function () {
+            clearTimeout(fetchTimeout);
             formElements.forEach(function (el) { el.disabled = false; });
             if (submitBtn) submitBtn.textContent = "Submit";
           });
