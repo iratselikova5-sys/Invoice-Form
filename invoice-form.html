@@ -149,6 +149,7 @@
       color: var(--text);
       transition: border-color 0.15s ease;
       line-height: 1.35;
+      cursor: pointer;
     }
 
     input::placeholder,
@@ -649,7 +650,7 @@
       <div class="step" id="step-2" data-step="2">
         <button type="button" id="btn-back" class="btn-back">&#8592; Back</button>
         <fieldset class="topic-picker field" aria-label="Choose request topic">
-          <div class="topic-radios" role="radiogroup" aria-label="Request topic">
+          <div class="topic-radios">
             <div class="topic-item">
               <label class="topic-choice-card">
                 <input type="radio" name="main_topic" value="alpha" required />
@@ -674,7 +675,7 @@
                   <div id="alpha-dynamic-master" class="subfields hidden"></div>
                   <div id="alpha-issues-extra"></div>
                   <div id="add-alpha-footer" class="hidden">
-                    <p class="hint" style="margin-bottom: 10px">You can add up to 10 separate alphas.</p>
+                    <p class="hint" style="margin-bottom: 10px" id="add-alpha-hint"></p>
                     <button type="button" class="btn-add" id="add-alpha">+ Add another alpha</button>
                   </div>
                 </div>
@@ -1292,6 +1293,12 @@
               return selectionIncludesAlphaId(s.value);
             });
           footer.classList.toggle("hidden", !showFooter);
+          var hint = document.getElementById("add-alpha-hint");
+          if (hint) {
+            var remaining = MAX_ALPHAS - total;
+            hint.textContent = total + " of " + MAX_ALPHAS + " alphas added" +
+              (remaining > 0 ? " — " + remaining + " more available." : " — limit reached.");
+          }
         }
       }
 
