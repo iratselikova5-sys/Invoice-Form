@@ -718,6 +718,11 @@
                       <option value="other">Other</option>
                     </select>
                   </div>
+                  <div id="invoice-link-broken-info" class="callout hidden" role="note">
+                    <p>If an invoice is not paid due to the payout limit, it will be removed around the 19th–20th of the month. As a result, the invoice link will no longer work.</p>
+                    <p>However, please don't worry — all unpaid tasks will be automatically included in future invoices and paid once the required payout limit is reached.</p>
+                    <p>If this situation does not match your case, please describe your question in the field below.</p>
+                  </div>
                   <div id="invoice-desc-wrap" class="field hidden">
                     <label for="invoice-desc">Your question <span class="req" id="invoice-desc-req" hidden>*</span><span class="optional-label" id="invoice-desc-opt" hidden>(optional)</span></label>
                     <textarea id="invoice-desc" name="invoice_description" rows="4" placeholder="Type your question here"></textarea>
@@ -1351,13 +1356,21 @@
       const invoiceDescWrap = document.getElementById("invoice-desc-wrap");
       invoiceSelect.addEventListener("change", function () {
         const on = !!this.value;
-        const isOther = this.value === "other";
+        const isRequired = this.value === "other" || this.value === "link_broken";
+        const isLinkBroken = this.value === "link_broken";
         invoiceDescWrap.classList.toggle("hidden", !on);
-        document.getElementById("invoice-desc").required = isOther;
-        document.getElementById("invoice-desc-req").hidden = !isOther;
-        document.getElementById("invoice-desc-opt").hidden = !on || isOther;
+        document.getElementById("invoice-link-broken-info").classList.toggle("hidden", !isLinkBroken);
+        document.getElementById("invoice-desc").required = isRequired;
+        document.getElementById("invoice-desc-req").hidden = !isRequired;
+        document.getElementById("invoice-desc-opt").hidden = !on || isRequired;
         syncOtherRequired();
-        if (on) document.getElementById("invoice-desc").focus();
+        if (on) {
+          if (isLinkBroken) {
+            document.getElementById("invoice-link-broken-info").scrollIntoView({ behavior: "instant", block: "nearest" });
+          } else {
+            document.getElementById("invoice-desc").focus();
+          }
+        }
       });
 
       /* Payment */
@@ -1401,6 +1414,7 @@
         syncTopicSelectEmptyState(invoiceSelect);
         document.getElementById("invoice-desc").value = "";
         invoiceDescWrap.classList.add("hidden");
+        document.getElementById("invoice-link-broken-info").classList.add("hidden");
         document.getElementById("invoice-desc").required = false;
         document.getElementById("invoice-desc-req").hidden = true;
         document.getElementById("invoice-desc-opt").hidden = true;
