@@ -113,6 +113,13 @@
       margin-left: 2px;
     }
 
+    .optional-label {
+      font-weight: 400;
+      color: var(--muted);
+      font-size: 0.85em;
+      margin-left: 3px;
+    }
+
     input[type="text"],
     input[type="email"],
     input[type="tel"],
@@ -711,7 +718,7 @@
                     </select>
                   </div>
                   <div id="invoice-desc-wrap" class="field hidden">
-                    <label for="invoice-desc">Your question <span class="req" id="invoice-desc-req" hidden>*</span></label>
+                    <label for="invoice-desc">Your question <span class="req" id="invoice-desc-req" hidden>*</span><span class="optional-label" id="invoice-desc-opt" hidden>(optional)</span></label>
                     <textarea id="invoice-desc" name="invoice_description" rows="4" placeholder="Type your question here"></textarea>
                   </div>
                 </div>
@@ -832,7 +839,7 @@
       <label>I confirm that the new account belongs to me. <span class="req">*</span></label>
     </div>
     <div class="field">
-      <label>Additional info</label>
+      <label>Additional info <span class="optional-label">(optional)</span></label>
       <textarea name="payment_additional_info" rows="3" placeholder="If you have any additional info that you'd like to share, please type it here"></textarea>
     </div>
   </template>
@@ -847,7 +854,7 @@
       <label>I confirm that the new account belongs to me. <span class="req">*</span></label>
     </div>
     <div class="field">
-      <label>Additional info</label>
+      <label>Additional info <span class="optional-label">(optional)</span></label>
       <textarea name="payment_additional_info" rows="3" placeholder="If you have any additional info that you'd like to share, please type it here"></textarea>
     </div>
   </template>
@@ -862,7 +869,7 @@
       <label>I confirm that the new account belongs to me. <span class="req">*</span></label>
     </div>
     <div class="field">
-      <label>Additional info</label>
+      <label>Additional info <span class="optional-label">(optional)</span></label>
       <textarea name="payment_additional_info" rows="3" placeholder="If you have any additional info that you'd like to share, please type it here"></textarea>
     </div>
   </template>
@@ -881,7 +888,7 @@
       <input type="text" name="payment_wire_swift" placeholder="8 to 11 character code" pattern="[A-Za-z]{4}[A-Za-z]{2}[A-Za-z0-9]{2}([A-Za-z0-9]{3})?" title="8 or 11 character SWIFT/BIC code (e.g. AAAABBCC or AAAABBCCDDD)" />
     </div>
     <div class="field">
-      <label>Routing number (ABA)</label>
+      <label>Routing number <span class="optional-label">(applicable only for ACH)</span></label>
       <input type="text" name="payment_wire_routing_number" placeholder="123456789" inputmode="numeric" pattern="[0-9]{9}" title="9-digit ABA routing number" />
     </div>
     <div class="field">
@@ -893,7 +900,7 @@
       <label>I confirm that the new account belongs to me. <span class="req">*</span></label>
     </div>
     <div class="field">
-      <label>Additional info</label>
+      <label>Additional info <span class="optional-label">(optional)</span></label>
       <textarea name="payment_additional_info" rows="3" placeholder="If you have any additional info that you'd like to share, please type it here"></textarea>
     </div>
   </template>
@@ -1148,6 +1155,7 @@
       document.querySelectorAll("select.topic-select").forEach(syncTopicSelectEmptyState);
 
       function showStep(n) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
         step1.classList.toggle("is-active", n === 1);
         step2.classList.toggle("is-active", n === 2);
         var dot1 = document.getElementById("step-dot-1");
@@ -1166,11 +1174,10 @@
       });
 
       btnContinue.addEventListener("click", function () {
-        if (!document.getElementById("name").checkValidity() || !document.getElementById("email").checkValidity()) {
-          document.getElementById("name").reportValidity();
-          document.getElementById("email").reportValidity();
-          return;
-        }
+        var nameEl = document.getElementById("name");
+        var emailEl = document.getElementById("email");
+        if (!nameEl.checkValidity()) { nameEl.reportValidity(); return; }
+        if (!emailEl.checkValidity()) { emailEl.reportValidity(); return; }
         showStep(2);
         var checkedTopic = document.querySelector('input[name="main_topic"]:checked');
         if (checkedTopic) applyMainTopic(checkedTopic.value);
@@ -1200,6 +1207,11 @@
             star.className = "req";
             star.textContent = " *";
             lab.appendChild(star);
+          } else {
+            const opt = document.createElement("span");
+            opt.className = "optional-label";
+            opt.textContent = "(optional)";
+            lab.appendChild(opt);
           }
           let input;
           if (f.type === "textarea") {
@@ -1328,6 +1340,7 @@
         invoiceDescWrap.classList.toggle("hidden", !on);
         document.getElementById("invoice-desc").required = isOther;
         document.getElementById("invoice-desc-req").hidden = !isOther;
+        document.getElementById("invoice-desc-opt").hidden = !on || isOther;
         syncOtherRequired();
         if (on) document.getElementById("invoice-desc").focus();
       });
@@ -1375,6 +1388,7 @@
         invoiceDescWrap.classList.add("hidden");
         document.getElementById("invoice-desc").required = false;
         document.getElementById("invoice-desc-req").hidden = true;
+        document.getElementById("invoice-desc-opt").hidden = true;
       }
 
       function clearPaymentSection() {
