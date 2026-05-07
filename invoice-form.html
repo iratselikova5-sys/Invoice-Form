@@ -1000,7 +1000,7 @@
       const ALPHA_FIELDS = {
         incorrect_royalty: [
           { name: "alpha_id", label: "Alpha ID", type: "text", suffix: "" },
-          { name: "pm", label: "PM who sent the task", type: "text", suffix: "" },
+          { name: "pm", label: "Project Manager who sent the task", type: "text", suffix: "" },
           { name: "correct_royalty", label: "Correct royalty", type: "text", inputmode: "decimal", suffix: "" },
           {
             name: "alpha_description",
@@ -1013,7 +1013,7 @@
         ],
         alpha_missing: [
           { name: "alpha_id", label: "Alpha ID", type: "text", suffix: "" },
-          { name: "pm", label: "PM who sent the task", type: "text", suffix: "" },
+          { name: "pm", label: "Project Manager who sent the task", type: "text", suffix: "" },
           {
             name: "alpha_description",
             label: "Additional info",
@@ -1050,7 +1050,7 @@
         ],
         incorrect_rate: [
           { name: "alpha_id", label: "Alpha ID", type: "text", suffix: "" },
-          { name: "pm", label: "PM who sent the task", type: "text", suffix: "" },
+          { name: "pm", label: "Project Manager who sent the task", type: "text", suffix: "" },
           { name: "correct_rate", label: "Correct rate", type: "text", inputmode: "decimal", suffix: "" },
           {
             name: "alpha_description",
@@ -1063,7 +1063,7 @@
         ],
         incorrect_volume: [
           { name: "alpha_id", label: "Alpha ID", type: "text", suffix: "" },
-          { name: "pm", label: "PM who sent the task", type: "text", suffix: "" },
+          { name: "pm", label: "Project Manager who sent the task", type: "text", suffix: "" },
           { name: "correct_volume", label: "Correct volume", type: "text", suffix: "" },
           {
             name: "alpha_description",
@@ -1076,7 +1076,7 @@
         ],
         not_my_task: [
           { name: "alpha_id", label: "Alpha ID", type: "text", suffix: "" },
-          { name: "pm", label: "PM who sent the task", type: "text", suffix: "" },
+          { name: "pm", label: "Project Manager who sent the task", type: "text", suffix: "" },
           {
             name: "alpha_description",
             label: "Additional info",
@@ -1241,6 +1241,14 @@
           }
           wrap.appendChild(lab);
           wrap.appendChild(input);
+          if (f.name === "alpha_id") {
+            var hint = document.createElement("p");
+            hint.className = "hint";
+            hint.style.marginTop = "5px";
+            hint.style.marginBottom = "0";
+            hint.textContent = "Find it in the subject of your task email or ID column in the invoice.";
+            wrap.appendChild(hint);
+          }
           container.appendChild(wrap);
         });
       }
